@@ -1,0 +1,106 @@
+diff --git a/.bashrc b/.bashrc
+index 0b36766..e31952e 100644
+--- a/.bashrc
++++ b/.bashrc
+@@ -10,6 +10,8 @@ export HISTCONTROL=erasedups
+ # Append to history file
+ shopt -s histappend
+ 
++alias brake='bundle exec rake'
++
+ VISUAL=vim
+ EDITOR="$VISUAL"
+ LESS="FRX"
+@@ -30,3 +32,5 @@ bind '"\C-w": backward-kill-word'
+ [ -z "$PS1" ] || export PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$(git_prompt_info '(%s)')$ "
+ 
+ [ ! -f "$HOME/.bashrc.local" ] || . "$HOME/.bashrc.local"
++
++PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+diff --git a/.hashrc b/.hashrc
+index 8f97806..045619a 100644
+--- a/.hashrc
++++ b/.hashrc
+@@ -193,10 +193,17 @@ if [ -n "$BASH_VERSION" ]; then
+   bind '"\C-q": "fg %-\n"'
+ fi
+ 
+-alias sc='script_rails console'
+-alias ss='script_rails server -u'
++#alias sc='script_rails console'
++# run server local as default for better security
++#alias ss='script_rails server -b 127.0.0.1'
++#alias ssall='script_rails server'
++alias sc='rails console'
++alias ss='rails server -b 127.0.0.1'
++alias ssall='rails server'
+ alias sdbc='script_rails dbconsole -p'
+ 
++alias lsn='lsof -iTCP -sTCP:LISTEN -P -n'
++
+ alias testify="watchr ~/.watchr.rb"
+ alias vanguard="guard -c -n false"
+ alias vangaurd="vanguard"
+@@ -285,6 +292,27 @@ gco () {
+   fi
+ }
+ 
++pick() {
++  if [ $# -eq 0 ]; then
++    echo "No arguments present. Specifiy the line number to pick"
++  else
++    sed -n $1,1p
++  fi
++}
++
++remkh() {
++  echo "Attempting to delete $1 line from .ssh/known_hosts"
++  if [ $# -eq 0 ]; then
++    echo "No arguments present. Specifiy the line number to remove from known_hosts"
++  else
++    echo "Found:"
++    sed -n $1,1p ~/.ssh/known_hosts
++    echo "Attempting Removal:"
++    sed -i -e "$1d" ~/.ssh/known_hosts
++  fi
++}
++
++
+ alias gap='git add -p'
+ alias gb='git branch'
+ alias gc='git commit -v'
+@@ -308,3 +336,18 @@ alias vi='vim'
+ bettervim="/Applications/MacVim.app/Contents/MacOS/Vim"
+ [[ -f "$bettervim" ]] && alias vim="$bettervim"
+ [[ -f "$HOME$bettervim" ]] && alias vim="$HOME$bettervim"
++
++alias lol='git log --graph --decorate --pretty=oneline --abbrev-commit'
++alias lola='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
++
++# alias for viewing simple commit metrix
++alias mycommits="git log --author=`git config --global --list | grep 'user.name' | sed 's/user.name=//'` | grep 'Author:' | wc -l"
++alias mystat="git log --author=`git config --global --list | grep 'user.name' | sed 's/user.name=//'` --pretty=tformat: --numstat | awk '{ add += \$1 ; subs += \$2 ; loc += \$1 - \$2 } END { printf \"add %s remove %s total %s\n\",add,subs,loc}'"
++alias mystatd="git log --author=`git config --global --list | grep 'user.name' | sed 's/user.name=//'` --pretty=tformat: --numstat | sort -n"
++alias allcommits="git log | grep 'Author:' | wc -l"
++alias allstat="git log --pretty=tformat: --numstat | awk '{ add += \$1 ; subs += \$2 ; loc += \$1 - \$2 } END { printf \"add %s remove %s total %s\n\",add,subs,loc}'"
++alias allstatd="git log --pretty=tformat: --numstat | sort -n"
++
++# chop after the colon. i.e. "cat faillist | rchop | uniq" for file list
++alias rchop="awk -F ':' '{print \$1}'"
++
+diff --git a/.vimrc b/.vimrc
+index 6ae8500..12c9209 100644
+--- a/.vimrc
++++ b/.vimrc
+@@ -1,8 +1,11 @@
++let g:no_turbux_mappings = 1
++
+ runtime! autoload/pathogen.vim
+ if exists('g:loaded_pathogen')
+   call pathogen#runtime_prepend_subdirectories(expand('~/.vimbundles'))
+ endif
+ 
++colorscheme molokai
+ syntax on
+ filetype plugin indent on
+ 
