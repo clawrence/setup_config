@@ -1,0 +1,109 @@
+
+## Docker source is at github  https://github.com/docker/docker.git
+ # I had to down load to track when a bug was fixed in an old
+ # version that a customer was using.
+ # below are some old docker notes to help refresh as needed.
+
+
+## quick setup docker on mac
+  #first shell
+    docker-machine start dev
+  #second shell
+    docker-machine env dev
+    #to get environment set up
+      eval $(docker-machine env dev)
+      docker info
+      # see all images
+        docker images
+      # see if any running
+        docker ps
+      #if name already in use then do this
+        docker ps -a
+        docker rm (hash)
+
+
+  #look at network
+    docker network ls
+  #when you run a container you can use --network flag to specify
+  #you want to run container on: bridge, host, none
+    docker network inspect bridge
+
+--- Example Dockerfile from development directory
+
+FROM java:openjdk-8-jre
+VOLUME /tmp
+WORKDIR /usr/local/exampleproject/config
+ADD src/main/resources/logback.xml logback.xml
+ADD src/main/resources/application.properties application.properties
+WORKDIR /usr/local/exampleproject
+ADD target/exampleproject-1.0-SNAPSHOT-jar-with-dependencies.jar exampleproject-1.0.jar
+ADD stub stub
+RUN sh -c 'touch exampleproject-1.0.jar'
+EXPOSE 8080 6102
+ENTRYPOINT ["java", "-Dapp.config.location=config", "-Dlogback.configurationFile=config/logback.xml", "-jar", "/usr/local/exampleproject/exampleproject-1.0.jar"]
+
+--- To create docker image
+
+  docker load < file.tar
+
+  docker run -name exampleproject -d -p 6102:6102 -p 8080:8080 -v /usr/local/exampleproject/log:/usr/local/exampleproject/log exampleproject1.1
+
+  # add additional directorys such as "-v /usr/local/proxycmm/stubs:/usr/local/proxycmm/stub" to allow modifying stubed responses
+
+
+--- Below is general info that may be of use?
+
+#demo create container and then see it with network instpect
+  docker run -itd --name=container2 busybox
+  docker network inspect bridge
+  docker attach container2
+  ifconfig
+  ping -w3 172.17.0.3
+  ping -w3 172.17.0.2
+  cat /etc/hosts
+  ctrl p ctrl q (exit attach)
+
+
+# You can create your own user-defined networks that better isolate containers
+Types
+  bridge network
+
+  docker network create --driver bridge isolation_nw
+  docker network ls
+  docker run --network=ioslated_nw -itd --name=container3 busybox
+  docker network inspect isolated_nw
+  #(notice it doesn't have a subnet or gateway defined in Config)
+
+  #When you initialize or join a swarm, Docker creates the docker_gwbridge network
+  #and uses it for communication among swarm nodes on different hosts
+  #If you do not create it in advance Docker will create it on demand
+  #example:
+
+  docker network create --subnet 172.30.0.0/16 -opt com.docker.network.bridge.name=docker_gwbridge -opt com.docker.network.bridge.enable_icc=false docker_gwbridge
+
+  #Example to create a network and use it for service from a manager node in the swarm (need to read about swarm mode)
+
+  docker network create --driver overlay --subnet 10.0.9.0/24 my-multi-host-network
+
+  docker service create --replicas 2 --network my-multi-host-network --name my-web nginx
+
+  #overlay networks for a swarm are not available to containers started with docker run that dont' run as part of a swarm mode service (read about swarm mode overlay-security-model)
+
+  #if you are not using docker engine in swarm mode, the overlay network requires
+  #a valid key-value store service, i.e.,  consul, etcd, or Zookeeeper.
+
+  #external key-stores need 4879 data plan and 7946 control plane with other
+  #ports as keystore requires... for --opt encrypted you will need to ensure
+  #protocol 50 ESP traffic is allowed.   With serverl machines provisioned
+  #you can use docker swarm to quickly form them into a swarm that includes
+  #a discovery service as well.   uses --cluster configurations
+
+  #Docker daemon run embeddd DNS server to provide automatic service discovery 
+  #for containers connected to user defined networks.  First attempt is to 
+  #embedded dns then if it cannot resolve it goes to external dns configured
+  #for the container.i 127.0.0.11 in resolve.conf
+
+
+
+
+

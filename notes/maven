@@ -1,0 +1,193 @@
+
+#look at available dependencies? popularity?
+  https://mvnrepository.com
+
+
+#example of generating a project
+#(https://maven.apache.org/guides/getting-started/)
+
+#create example project
+mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-site -DgroupId=com.clawrence.app -DartifactId=my-app-site
+#examples of webapp and multiple
+
+#useful in a pom.xml
+plugin
+  groupId org.apache.maven.plugins
+  artifactId maven-assembly-plugin
+  descriptorRef jar-with-dependencies
+  put in mainClass to identify startup class
+  execution id make-assembly
+  phase package, goal single
+plugin
+  groupId org.codehaus.mojo
+  artifactId jaxb2-maven-plugin
+  execution id xjc, goal xjc
+  configuration source, packageName
+
+dependencies (used in some projects may/may not be good)
+  io.netty
+  org.slf4j
+  ch.qos.logback
+  java.xml.bind
+  com.sun.xml.bind
+  junit
+
+
+
+
+Intro to some maven basics
+
+#Maven XSD format, etc
+#http://maven.apache.org/ref/3.3.9/maven-model/maven.html
+
+
+#https://maven.apache.org/guides/getting-started/index.html
+
+Common Phases:
+  validate
+  compile
+  test
+  package
+  verify
+  install
+  deploy
+  (clean, site)
+
+
+
+Command Line
+
+#check installed
+  mvn --version
+
+
+#to build and install artificats
+#FYI, majority of projects build and create jar and put in repo
+  mvn clean install
+
+#to build environment
+  mvn clean deploy
+
+# to do tests 
+# FYI, tests using surefire plugin look for
+#   *Test.java, *Test*.java, *TestCase.java
+  mvn test
+
+# to compile tests only
+  mvn test-compile
+
+# create jar
+  mvn package
+
+# put the jar in local repo
+#FYI, ~/.m2/repository is default location of local repo
+  mvn install
+
+#environment specific eclipse
+  mvn eclipse:eclipse
+#environment specific intellij
+  mvn idea:idea
+
+#SNAPSHOT is used for development
+#release process will x.y-SNAPSHOT becomes x.y
+#so you know SNAPSHOT is older than release jar
+# maven release plugin exists
+
+
+#TODO:
+# configure plugin
+#  maven-compiler-plugin
+
+# add resources using standard directory structure
+#  files under src/main/resources get included
+#  so
+#   resource -> META-INF -> application.properties
+#  gets 
+#   jar top level -> application.properties 
+#   and also maven directory with pom.properties, pom.xml
+#   maven generates MANIFEST.MF by default
+# add test resources using stardard directory structure
+#  files under src/test/resources say test.properties
+
+
+# javac can use -source -target for JVM to be supported
+# either use properties in pom.xml
+#  <maven.compiler.source>1.8</maven.compiler.source>
+#  <maven.compiler.target>1.8</maven.compiler.target>
+# or configuration of mavin-compiler-plugin
+#  <source>1.8</source>
+#  <target>1.8</target>
+# Note: target does not guarantee code will run on JRE of specified version
+# you must either configure the compiler's boot classpath to match target
+# JRE ore use "Animal Sniffer Maven Plugin" to verify your code 
+# doesn't use unintended APIs
+# Note:  source does not guarantee that your code compiles on specified
+# JDK version.  To use different one than used to launch Maven
+# see: https://maven.apache.org/plugins/maven-compiler-plugin/examples/compile-using-different-jdk.html
+# to know how to use Maven toolchains
+
+# pom.xml has defaults for example, 
+#  build -> resources -> resource defines a directory and filtering as false
+# if you want true you have to add the xml stuff to pom.xml
+# and then show filtering as true.
+# you can use $(project.name} or ${settings.localRepository} to
+# get things that are defined in pom.xml or settings.xml
+# When you have filtered=true then you can have resource files
+# like application.properties use ${project.name} and it will
+# use it.   
+# Test: create src/main/resources/META-INFO/application.properties 
+# be sure to use ${project.name} and then do
+#   mvn process-resources
+# look at target/classes/META-INFO/application.properties
+# then edit pom.xml to add 
+# <build>
+#   <resources>
+#      <resource>
+#        <directory>src/main/resources</directory>
+#        <filtering>true</filtering>     
+#      </resource>   
+#   </resources>
+# <build>
+# then 
+#  mvn process-resources
+# Now you see they updated the names rather than literal values
+# The next step is if you have other property values that you
+# want to show up in your application.properties with filtering
+# you can either define them in <properties> section of pom.xml
+# or you can define build->filters->filter specifying the path to
+# the propery file and the convention would be src/main/filters
+# as most common location for the filtering properties to be recorded
+# Note: filteirng resources can also get system properties like
+# jave build in (java.version or user.home) or properties defined on
+# the command line java -Dparams
+# Example:
+#  application.properties has
+     java.version=${java.version}
+          command.line.prop=${command.line.prop}
+  # Now try
+  #   mvn process-resources "-Dcommand.line.prop=hello again"
+
+
+  # dependencies
+  #  identified by {groupId, artifactId, version, scope}
+
+
+  # to deploy jar to remove repository
+  #configure url and auth info in pom.xml
+    <distributionManagement>
+      <repository>
+        <id>mycompany-repository</id>
+        <name>My Company Repository</name>
+        <url>scp://repository.mycompnay.com/repository/maven2</url>
+      </repository>
+    </distributionManagement>
+#note: our code uses <repositories> and has no auth stuff
+#site example had settings.xml that defined server name, 
+# private key path, passphrase
+
+
+
+https://maven-repository.com/archetypes
+
+
+

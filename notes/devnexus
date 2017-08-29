@@ -1,0 +1,92 @@
+
+
+Mobile Apps:
+ Apache Cordova (html, css, js: runs slow)
+ Native Script (js (angular, typescript; faster)
+
+
+ Android apktool reverse engineer
+
+
+# (https://www.quora.com/What-is-the-difference-between-NAT-and-Proxy-what-are-the-places-we-use-these-and-why)
+  NAT vs Proxy
+    NAT: routers, firewalls [ linux, cisco ]
+    applications are not aware of it, no client side configuration
+  Forward Proxy
+    corporate uses to cache and filter
+    client goes to proxy who decides if it is allowed
+    enforce internet access and data security policies
+    can be used on internet to make request appear to come from elsewhere
+  Transparent Proxy
+    client applications are not aware of them
+    router/firewall sends reqeust to software proxy application its running
+    such as squid before they go to internet.
+  Reverse Proxy
+    used to load balance and protect inside web servers from outside
+    hosts.  an insecure platform can set up secure apache reverse proxy
+    and use that to alloc internet access to web servers.  Cisco
+    makes ACE to allow high end switches and routers to run reverse
+    proxies.
+
+
+Technologies:
+  spring boot
+  java
+  python
+  Jenkins pipeline
+  prod 1/month
+  xray amazon, authv, authz, keyflow swagger, authjwt
+  git/jenkins/gocd (spinaker?)
+
+  define paterns for 80% of use cases:
+    1) sprint boot, java war, aws elastic beanstalk
+    2) serverless dynostore db
+    3) docker
+
+  nagios - it monitoring
+  graphite - store & graph
+  "single pane of glass" for all regions
+  "1 click roll backs"
+  falcor
+
+
+  github/scientist : comparing refactored critical path ruby code?
+
+  Asside: chrome plugins: camel-camel-camel (price tracking deals)
+
+Initial AWS,
+  pick gateway/reverse proxy (initially used nginx with header based
+  routing (authentication, transport security, load balancing..)
+
+
+
+
+Security Ideas:  think of real world and then consider equivalents
+in cloud.
+
+SAFE:
+  feeling vs reality
+TRUST:
+  wise vs foolish
+SECURE CASINO
+ video watching everything looks unprotected
+ hidden security all over may interact with people
+SECURE BANK
+ video
+ security guard
+ alarm button
+ safe and deposit/cash policies
+ secured pickup policies
+SECURE HOUSE:
+  hidden keys
+  lights/bushes
+  locked doors/windows
+  look before open the door
+SECURE CAR:
+  choice of car driven
+  keep valuables out of sight
+  location park
+  locked doors/windows up
+  alarm system
+
+

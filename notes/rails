@@ -1,0 +1,261 @@
+
+
+# some notes on hashrocket ruby dev process
+# http://blog.therubymug.com/blog/2011/07/26/the-install-osx-lion.html
+
+
+# brew may install some stuff
+   may need xcode from apple store for brew
+   brew install macvim
+   brew install wget proctools ack ctags-exuberant markdown
+   brew install imagemagick
+   brew install mongo
+   brew install postresql
+   brew install mysql
+   brew install git
+   ssh-keygen -t rsa (public key for github account; danger openssh bug)
+   (clone https://github.com/hashrocket/dotmatrix.git)
+   (links and sets up .bashrc, .hashrc, .vim, .vimrc vimbundles.sh etc)
+
+# consider sourcetree for git viewer?
+
+
+# For rails get rvm, pull git rep. gem bundler will install Gemfile full
+# of gems
+
+rvm
+
+rvm info
+
+ruby 2.2.4p230
+
+Example Gemfile
+  source "http://rubygems.org"
+  gem "bundler"
+  gem "builder"
+  gem "carmen"
+  gem "decent_exposure"
+  gem 'devise'
+  gem 'bcrypt-ruby', '3.1.2' #For Devise 2.2.7. bcrypt-ruby 3.1.3 caused uninitialized constant BCrypt::Password
+  gem "ffaker"
+  gem "fabrication"
+  gem "haml-rails"
+  gem "mini_magick"
+  gem 'mongoid', '5.0.2'
+  gem "mongoid-tree", require: "mongoid/tree"
+  gem 'mongoid-slug'
+  gem 'mongoid-history'
+  gem 'rails'
+  gem "roxml", git: "https://github.com/hashrocket/roxml.git"
+  gem "sass"
+  gem "timeliness"
+  gem "whenever"
+  gem "nokogiri"
+  gem "macaddr", git: 'https://github.com/tsilen/macaddr.git'
+  gem "systemu"
+  gem "snmp"
+  gem "net-ldap"
+  gem "jquery-ui-rails"
+  gem "therubyracer", :platforms => :ruby
+  gem 'country_select'
+  gem 'countries'
+  gem 'zeus'
+  gem 'sprockets-rails'
+  gem 'unicorn'
+  gem 'unicorn-worker-killer'
+
+  group :development, :test do
+    gem "webmock"
+    gem "rack-mini-profiler"
+    gem "quiet_assets"
+    gem "rspec-rails"
+    gem 'rspec-its'
+    gem 'rspec-collection_matchers'
+    gem "ruby-prof"
+    gem "thin"
+    gem "timecop"
+    gem 'commands'
+    gem 'headless'
+    gem 'byebug'
+    gem 'puma'
+  end
+
+  group :production do
+    gem "syslogger"
+  end
+
+  group :test do
+    gem 'cucumber_timing_presenter'
+    gem "capybara"
+    gem 'selenium-webdriver', "<2.48" # selenium-webdriver 2.48.0 -> 2.48.2 breaks scrolling elements into view. Try later versions and remove this restriction. (https://github.com/SeleniumHQ/selenium/issues/1200)
+    gem 'cucumber'
+    gem "cucumber-rails", :require => false
+    gem "fuubar"
+    gem "fuubar-cucumber"
+    gem "launchy"
+    gem 'ffi-rzmq', '1.0.3'
+    gem 'ffi', '1.9.0'
+    gem "flatware", git: 'https://github.com/clawrence/flatware.git', ref: '91b0eb9778754a86688a3e2a1aa2fb55b4fa1fb7'
+    gem "shoulda"
+    gem 'mongoid-rspec'
+    gem 'simplecov', :require => false
+    gem "rspec_junit_formatter"
+    gem 'shoulda-callback-matchers', '~> 1.1.1'
+  end
+
+
+
+# gem list
+gem list
+
+*** LOCAL GEMS ***
+
+actionmailer (4.2.5)
+actionpack (4.2.5)
+actionview (4.2.5)
+activejob (4.2.5)
+activemodel (4.2.5)
+activerecord (4.2.5)
+activesupport (4.2.5)
+addressable (2.3.8)
+arel (6.0.3)
+bcrypt (3.1.10)
+bcrypt-ruby (3.1.2)
+bigdecimal (1.2.6)
+bson (4.1.1, 4.0.4)
+builder (3.2.2)
+bundler (1.11.2)
+bundler-unload (1.0.2)
+byebug (8.2.1)
+capybara (2.5.0)
+carmen (1.0.2)
+childprocess (0.5.8)
+chronic (0.10.2)
+commands (0.2.1)
+concurrent-ruby (1.0.0)
+countries (1.2.2)
+country_select (2.5.1)
+crack (0.4.3)
+cucumber (1.3.20)
+cucumber-rails (1.4.2)
+cucumber_timing_presenter (1.0.0.0)
+currencies (0.4.2)
+daemons (1.2.3)
+decent_exposure (2.3.2)
+devise (3.5.2)
+diff-lcs (1.2.5)
+docile (1.1.5)
+easy_diff (0.0.6)
+erubis (2.7.0)
+eventmachine (1.0.8)
+executable-hooks (1.3.2)
+fabrication (2.14.1)
+ffaker (2.1.0)
+ffi (1.9.0)
+ffi-rzmq (1.0.3)
+fuubar (2.0.0)
+fuubar-cucumber (0.0.22)
+gem-wrappers (1.2.7)
+get_process_mem (0.2.1)
+gherkin (2.12.2)
+globalid (0.3.6)
+haml (4.0.7)
+haml-rails (0.9.0)
+hashdiff (0.2.3)
+headless (2.2.0)
+html2haml (2.0.0)
+i18n (0.7.0)
+i18n_data (0.7.0)
+io-console (0.4.3)
+jquery-ui-rails (5.0.5)
+json (1.8.3, 1.8.1)
+kgio (2.10.0)
+launchy (2.4.3)
+libv8 (3.16.14.13)
+loofah (2.0.3)
+mail (2.6.3)
+method_source (0.8.2)
+mime-types (2.99)
+mini_magick (4.3.6)
+mini_portile2 (2.0.0)
+minitest (5.8.4)
+mongo (2.2.7, 2.2.4)
+mongoid (5.0.2)
+mongoid-compatibility (0.3.1)
+mongoid-history (0.5.0)
+mongoid-rspec (3.0.0)
+mongoid-slug (5.1.1)
+mongoid-tree (2.0.1)
+multi_json (1.11.2)
+multi_test (0.1.2)
+net-ldap (0.12.1)
+newrelic_rpm (3.16.2.321)
+nokogiri (1.6.7)
+origin (2.2.0)
+orm_adapter (0.5.0)
+psych (2.0.8)
+puma (3.6.0)
+quiet_assets (1.1.0)
+rack (1.6.4)
+rack-mini-profiler (0.9.8)
+rack-test (0.6.3)
+rails (4.2.5)
+rails-deprecated_sanitizer (1.0.3)
+rails-dom-testing (1.0.7)
+rails-html-sanitizer (1.0.2)
+railties (4.2.5)
+raindrops (0.15.0)
+rake (10.4.2)
+rdoc (4.2.0)
+ref (2.0.0)
+responders (2.1.0)
+rspec (3.4.0)
+rspec-collection_matchers (1.1.2)
+rspec-core (3.4.1)
+rspec-expectations (3.4.0)
+rspec-its (1.2.0)
+rspec-mocks (3.4.0)
+rspec-rails (3.4.0)
+rspec-support (3.4.1)
+rspec_junit_formatter (0.2.3)
+ruby-prof (0.15.8)
+ruby-progressbar (1.7.5)
+ruby_parser (3.7.2)
+rubygems-bundler (1.4.4)
+rubyzip (1.1.7)
+rvm (1.11.3.9)
+safe_yaml (1.0.4)
+sass (3.4.19)
+selenium-webdriver (2.47.1)
+sexp_processor (4.6.0)
+shoulda (3.5.0)
+shoulda-callback-matchers (1.1.4)
+shoulda-context (1.2.1)
+shoulda-matchers (2.8.0)
+simplecov (0.11.1)
+simplecov-html (0.10.0)
+snmp (1.2.0)
+sort_alphabetical (1.0.2)
+sprockets (3.5.0)
+sprockets-rails (2.3.3)
+stringex (2.5.2)
+syslogger (1.6.4)
+systemu (2.6.5)
+therubyracer (0.12.2)
+thin (1.6.4)
+thor (0.19.1)
+thread_safe (0.3.5)
+tilt (2.0.1)
+timecop (0.8.0)
+timeliness (0.3.7)
+tzinfo (1.2.2)
+unicode_utils (1.4.0)
+unicorn (5.0.1)
+unicorn-worker-killer (0.4.4)
+warden (1.2.3)
+webmock (1.22.3)
+websocket (1.2.2)
+whenever (0.9.4)
+xpath (2.0.0)
+zeus (0.15.4)
+

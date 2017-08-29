@@ -1,0 +1,39 @@
+
+##when you have to figure out latest branch on 17 different repo after
+  developer leaves consider the following:
+
+  # list all branches for project_dir
+    git --git-dir ./project_dir/.git branch -a
+
+  #list branches with extra formated info for project_dir
+    git --git-dir ./project_dir/.git for-each-ref --sort=-committerdate  --format='%(align:40) %(refname) %(end) %(objecttype) %(objectname) %(authordate:short)'
+
+
+## moving git repos is as follows:
+  cd to working directory for project moves and clone bare full project
+  git clone --bare (existing giturl)
+  cd into the project directory
+  (you may have to create the repo in gui (i.e. for gitlab) before you push )
+  git push --mirror  (new server giturl)
+
+## Below alias is cool but I always forget to use it.
+  alias glg='git log --graph --oneline --decorate --color --all'
+
+## On mac the see port listners this works
+  alias lsn='lsof -iTCP -sTCP:LISTEN -P -n'
+
+## misc
+  # alias to chop off content after ':'
+    alias rchop='awk -F '\'':'\'' '\''{print $1}'\'''
+  # alias used for rails only start local for security
+    alias ss='rails server -b 127.0.0.1'
+  # .sharedrc has hashrocket customizations (git_prompt_info)
+     (branch, and status in progress, hitch stuff)
+  # .gitconfig.local has user stuff
+  # molokai color scheme can be found here
+    git@github.com:tomasr/molokai.git
+  # TODO: prune down hashrocket/dotmatrix to minimal useful stuff.
+
+
+
+

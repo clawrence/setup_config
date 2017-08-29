@@ -1,0 +1,38 @@
+
+Concerned that eclipse and plugins are not from https site so man in middle and you have to manually
+do checksum on files obtained to try and validate the published content.  There may not be certificates
+to verify content.  So this allows big security holes.  Dito other needed windows software.
+
+
+ Windows 
+  Eclipse Oxygen
+    has egit, has gradle plugins
+  Git for Windows from git hub provides command line git option
+  rpm files can be extracted as tar in linux distro
+  there is eclipse zip editor plugin this so-so to view contents of rpm
+  Pains:
+    - egit have to re-type urls no memory
+    - egit does not remember git source directory
+    - egit odd that source is outside workspace on drive
+    - egit does not seem to support blame
+    - gradle default view does not show custom task
+      (toolbar option  to enable showing under other)
+    - output source such as TMP dir does not show up in eclipse by
+      default.  To display it you have to add it as source and 
+      in the build path.
+    - Git for Windows does not have all git options like getting current branch
+    - task run as definition to be able to click execution tasks, use
+      Window -> Show View -> Other -> Gradle -> Gradle Tasks
+    - sometimes hangs after viewing rpm and have to close before gradle runs
+    - sometimes restart eclipse and then all is well.
+    - import git project to get source
+  Hacks:
+    gradle: isWindows = org.gradle.internal.os.OperatingSystem.current().windows
+    gradle: run_command.execute().text.replace("*","").trim()
+    gradle: "cmd /c cd ${projectDir}/${name} && git branch | findstr /b \"* \""
+    gradle  "git --git-dir=${name}.git --work-tree=#{name} rev-parse --abbrev-ref HEAD"
+    gradle: asset( proj_branch == build_branch)
+    gradle: println()
+
+
+
