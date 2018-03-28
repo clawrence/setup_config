@@ -1,4 +1,63 @@
 
+recent rails
+doing "rails new ." it has new Gemfile
+brew install postgresql
+(I use alias pgdb to start when needed)
+https://www.digitalocean.com/community/tutorials/how-to-setup-ruby-on-rails-with-postgres
+
+rake db:setup
+rails server
+rails g scaffold Post title:string body:text
+rake db:migrate
+
+---
+
+Historyically we use rvm.
+
+added rbenv-binstubs
+brew install rbenv-binstubs
+
+added rbenv-gemset
+https://github.com/jf/rbenv-gemset
+ brew install rbenv-gemset
+ cd project
+ rbenv gemset init project-gemset-name
+ rbenv gemset list
+ rbenv gemset delete [gemset]
+
+ gem uninstall --all
+
+
+
+lately using rbenv
+https://github.com/rbenv/rbenv
+https://gist.github.com/MicahElliott/2407918
+
+brew install rbenv 
+rbenv init (follow instructions)
+new window
+rbenv-doctor script
+rbenv install -l
+rbenv install 2.0.0-p247
+goto working directory
+rbenv version  (confirm right version)
+rbenv local 2.0.0-p247 (set local version for project)
+rbenv local --unset (to remove local ruby)
+gem install bundler (so it is using ruby you want)
+gem env home   (tells you where the gems are installed)
+rbenv global 1.8.7-p252 (can be used to set global ruby version)
+(leave off rbenv init in shell to have system ruby)
+.ruby-version or RBENV_VERSION env variable can be used to overide global
+
+#example
+goto directory
+rbenv install 2.4.2
+rbenv local 2.4.2
+gem install bundler
+create Gemfile
+bundle install
+
+---
 
 # some notes on hashrocket ruby dev process
 # http://blog.therubymug.com/blog/2011/07/26/the-install-osx-lion.html

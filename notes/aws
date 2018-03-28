@@ -1,0 +1,70 @@
+
+rails security twitter feed lead to following:
+
+---
+
+
+aws audit checking for security  
+
+(http://summitroute.com/blog/2017/05/30/free_tools_for_auditing_the_security_of_an_aws_account/)
+
+Possibly Really Bad:
+  Secuirty Group is open to 0.0.0.0/0
+  S3 Bucket is World readable
+
+
+How to collect info:
+1) AWS API calls to get current state
+2) Monitor CloudTrail (https://aws.amazon.com/cloudtrail/) logs and alerts
+   when potentially concerning changes are made
+3) Use AWS config (hettp://aws.amazon.com/config/) logs to undertand 
+how an account currently exists.
+
+
+Available Tools:
+  AWS Trusted Advisor (free with account, pay for better)
+  AWS Config  (tracks change history and provides sns notifications)
+  Scout2 (opensource 2014)
+  Prowler (githubcom/Alfresco/prowler)
+  Security Monkey (netflix github.com/Netflix/secuirty_monkey 2014 AWS and google cloud platform GCP Needs its own EC2 and Postgresql backend)
+  Cloud Custodian   ????
+
+
+---
+
+Aditya Balapure
+Security Engineer Grubhub
+
+Exploitations:
+bucket finder
+dns recon
+website spidering
+sandcastle
+AwsBucketDump
+teh S3 buckteers
+
+Access 101:
+IAM policy
+Bucket policy
+Access Cnotrol List (ACL)
+Statis Website hosting
+
+Detection:
+Boto
+AWSConfig
+cloudtrail/cloudwatch
+AWS Trusted Advisor (paid)
+Secruity monkey
+
+
+----
+
+Source Code Analysis Tools:
+
+  SonarQube (ide plugins)
+
+  Brakeman for ruby on rails CVEs
+
+  phpcs-security-audit for php
+
+

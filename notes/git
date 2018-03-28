@@ -1,4 +1,14 @@
 
+
+# to create new project 
+cd project-dir
+git init .
+after commit if you try say 
+rails new .
+and want to remove all non-files
+git clean -df
+
+
 ##when you have to figure out latest branch on 17 different repo after
   developer leaves consider the following:
 

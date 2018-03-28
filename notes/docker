@@ -1,4 +1,40 @@
 
+brew cask install virtualbox
+brew install docker docker-machine
+
+# create the vm
+# docker-machine create -d virtualbox dev
+#
+# # import environment variables for the docker-cli
+# eval "$(docker-machine env dev)"
+
+# brew install docker-machine
+# mac is virtualbox.  windows is hyperv  can not do both at same time.
+
+docker-machine ls
+
+docker-machine create --driver virtualbox default
+   (boot2docker.iso from github.com/boot2docker)
+   (this is minimal linux playground not intended for production)
+
+exposed ports on running can get ip using
+
+docker-machine ip default
+
+# you can run nginx webserver in a container using
+docker run -d -p 8000:80 nginx
+
+#then run curl with
+curl $(docker-machine ip defaut):8000
+
+docker-machine ls 
+
+docker-machine stop default
+
+docker-machine start default
+
+-------
+
 ## Docker source is at github  https://github.com/docker/docker.git
  # I had to down load to track when a bug was fixed in an old
  # version that a customer was using.
@@ -27,6 +63,10 @@
   #when you run a container you can use --network flag to specify
   #you want to run container on: bridge, host, none
     docker network inspect bridge
+
+-- DockerFile tutorial
+
+https://rominirani.com/docker-tutorial-series-writing-a-dockerfile-ce5746617cd
 
 --- Example Dockerfile from development directory
 

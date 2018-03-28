@@ -1,0 +1,67 @@
+
+#https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx
+#https://gist.github.com/lxneng/741932
+
+# brew to install
+
+# BSD license
+#
+# alias to start it up when needed
+#
+
+# install the binary
+brew install postgresql
+#
+# # init it
+initdb /usr/local/var/postgres
+#
+# # start the postgres server
+postgres -D /usr/local/var/postgres
+
+# create your database
+createdb mydb
+
+#psql DBNAME USERNAME
+
+psql mydb
+help
+create table users(id serial, name varchar(25));
+insert into users(name) values('eric');
+insert into users(name) values('lxneng');
+select * from users;
+\q
+
+
+pg_ctl --help
+pg_ctl stop
+
+# create user wiht password
+createuser -P my_user_name
+
+# grant rights for user to db
+ psql my_db_name
+
+# after connecting
+GRANT ALL PRIVILEGES ON datbase my_db_name TO my_user_name;
+
+
+# to see version of running postgres
+postgres -V
+
+# default user postgres is already present
+psql postgres
+\du
+\q
+#Found user /clawrence
+
+
+# mac gui tools for db access
+postico
+pgAdmin
+navicat
+
+
+# rails example
+https://www.digitalocean.com/community/tutorials/how-to-setup-ruby-on-rails-with-postgres
+
+
