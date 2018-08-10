@@ -1,0 +1,23 @@
+
+.ssh/config:
+
+Host bastion
+ Hostname 1.2.3.4 
+ ForwardAgent yes
+ User ec-user
+ StrictHostKeyChecking no
+ RequestTTY force
+ IdentityFile ~/.ssh/id_rsa_aws_name1
+
+Host rds-tunnel
+ Hostname 1.2.3.4 
+ User ec2-user
+ LocalForward  5433 nonprod-blaname-instance.hash.us-east-1.rds.amazonaws.com:5432
+ ServerAliveInterval 30
+ ServerAliveCountMax 3
+ IdentityFile ~/.ssh/id_rsa_aws_name2
+
+Host *
+ AddKeysToAgent yes
+ UseKeychain yes
+ IdentityFile ~/.ssh/id_rsa

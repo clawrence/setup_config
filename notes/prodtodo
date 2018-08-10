@@ -1,0 +1,766 @@
+
+favicon:
+
+wget http://publicsiteurl/logo.png
+
+magick identify -format "%[w]x%[h]" name_favicon.png
+
+convert name_favicon.png -define icon:auto-resize=16 logi.ico
+
+
+todo:
+
+A Few Items TODO:
+
+1) https and certificate
+2) Security Guide best practices and proper sign-on
+3) Authentication and Authorization Roles
+4) Actuator use and security practices
+5) security maven plugins to find security vulnerabilities
+6) make sure mvn site report for license works
+7) Database deploy/backup
+8) database encryption? file,db, in transit?
+9) scanning of threats from ingested content (dangerous xls/xlsx files, etc)
+10) access logs
+11) change tracking (history tracking)
+
+
+Product considerations:
+
+1) Free Open Source Licensing (FOSS) Compliance
+2) Encryption and Export Administration Regulations (EAR)
+3) On Going Common Vulnerabilities and Exposures (CVE) plan
+4) Vulnerability Reporting Process and Response plan
+5) Review of any legal requirements for information privacy (depends upon countries involved)
+6) Review of Site Security and Backup Practices
+7) Register and update of SSL certificates
+8) Site Redundancy and Availability plan
+9) Site Dashboard and metrics
+
+
+SpringBootStarters:
+https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-starters
+
+SpringHowToApplicationGuides:
+https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-docs/src/main/asciidoc/howto.adoc
+
+SpringBootAutoConfigurationDetails:
+https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure
+
+SpringBoot on Github: (maybe clone)
+https://github.com/spring-projects/spring-boot/
+
+
+-----
+
+brew list
+ack             git           libpng          node          ruby-build
+autoconf        icu4c         libtiff         openssl       sqlite
+cscope          imagemagick   libtool         pkg-config    tika
+excel-compare   jenv          libunistring    postgresql    vnu
+freetype        jpeg          macvim          python        wget
+gdbm            jsonpp        maven           rbenv         xz
+gettext         libidn2       mongodb         readline
+
+
+pretty json display:
+  jsonpp
+
+excel file compare tool: (see https://github.com/na-ka-na/ExcelCompare)
+  excel_cmp 1.xlsx 2.xlsx
+
+get md5checksum:
+md5 file
+
+----
+
+example pom.xml
+  replace company...
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.company.hack</groupId>
+    <artifactId>apoi</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        com.company.stuffing.Main
+                                    </mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <executions>
+                        <execution>
+                                <goals>
+                                        <goal>prepare-agent</goal>
+                                </goals>
+                        </execution>
+                        <execution>
+                                <id>report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                        <goal>report</goal>
+                                </goals>
+                        </execution>
+                        <execution>
+                            <id>jacoco-check</id>
+                            <goals>
+                                        <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                    <rules>
+                                            <rule>
+                                                    <element>PACKAGE</element>
+                                                    <limits>
+                                                            <limit>
+                                                                    <counter>LINE</counter>
+                                                                    <value>COVEREDRATIO</value>
+                                                                    <minimum>0</minimum>
+                                                            </limit>
+                                                    </limits>
+                                            </rule>
+                                    </rules>
+                            </configuration>
+                        </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>ooxml-schemas</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <version>3.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.18.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+</project>
+
+
+----
+
+Excel Sheets:
+
+formula references:
+  'sheet'!a1:a1
+
+
+relative vs absolute references in formulas
+  it has to do when rows/colums change if the formula is to update or not
+
+
+empty is different than blank
+  supposedly the formulas may evaluate if(expressions) as zero if empy and ignore if blank per googling
+
+
+APACHE POI:
+  uses 0 base row, col yet getLastColumn returns number of columns not last column
+
+-----
+
+
+https://docs.cypress.io/guides/references/trade-offs.html#
+
+cypress.io for ui tesitng with any browser (test written in javascript)
+  CURRENTLY only works with chrome! or headless!
+  new not fully baked yet
+  not a general purpose automation tool
+  runs inside of browser
+  only one browser at a time
+  each test is bound to a single origin
+  some bugs
+  UI TESTING
+
+https://docs.cypress.io/guides/guides/continuous-integration.html#
+there is support for jenkins, docker, travisCI, etc.
+you can record your tests running and make them available 
+
+
+https://github.com/cypress-io/cypress/issues/310
+https://www.w3.org/TR/webdriver/
+
+---
+How to Test Microsoft Browsers?
+
+https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/
+
+a company called browser stack can test you code deployed on internet
+
+google found:
+https://crossbrowsertesting.com/internet-explorer
+
+----
+
+Rails capybara
+
+selenium_webdriver most often used:
+
+https://www.seleniumhq.org/docs/01_introducing_selenium.jsp
+
+manual:
+  web interface will change considerably in near future
+  lack of time/resource
+
+Selenium IDE firefox plugin?
+  it reccords user actions as performed and exports a reusable script
+
+Full test requires coding selenium tests in native language
+
+selenium-webdriver:
+  chrome, ie 7,8,9,10,11, firefox latest, safari, opera, ...
+
+Better selenium reference:
+https://www.seleniumhq.org/about/platforms.jsp
+
+maybe not latest microsoft browser?
+
+Selenium remote control:
+(launches/kill browsers and acts as http proxy)
+https://www.seleniumhq.org/projects/remote-control/
+
+selenium grid for rc adn webdriver
+https://github.com/SeleniumHQ/selenium/wiki/Grid2
+
+Coding tests in java?
+https://www.seleniumhq.org/projects/webdriver/
+
+It looks like to test you have to run Windows10 and have driver:
+https://stackoverflow.com/questions/30044912/is-there-a-selenium-webdriver-available-for-the-microsoft-edge-browser
+
+Available drivers (unsure of support for bugs edge driver? 3rd party)
+https://docs.seleniumhq.org/download/
+
+Running Edge in selenium:
+https://stackoverflow.com/questions/31991309/selenium-on-windows-10-edge-browser
+
+http://www.automationtestinghub.com/selenium-3-launch-microsoft-edge-with-microsoftwebdriver/
+
+Maybe we can do it running java junit on windows 10 with right magic drivers
+
+----
+
+another example pom.xml:
+
+ -- company
+ -- prodname
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.company.prodname</groupId>
+  <artifactId>app</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>prodname</name>
+  <description>Demo project for Spring Boot</description>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.1.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <spring.profiles.active>local</spring.profiles.active>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.keycloak.bom</groupId>
+        <artifactId>keycloak-adapter-bom</artifactId>
+        <version>4.1.0.Final</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-cache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>3.17</version>
+    </dependency>
+    <!-- had to add this to get tests to run from command line with mvn -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>0.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-spring-boot-starter</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.properties</exclude>
+        </excludes>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <configuration>
+          <dateFormat>yyyyMMdd-HHmmss</dateFormat>
+          <injectAllReactorProjects>true</injectAllReactorProjects>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>PACKAGE</element>
+                  <limits>
+                    <limit>
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+          </execution>
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run build -- --prod</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run test -- --watch=false</arguments>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <nodeVersion>v8.11.1</nodeVersion>
+          <workingDirectory>ui</workingDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+          <argLine>-Xms512m -Xmx1024m</argLine>
+          <!-- <argLine>-Xms2048m -Xmx4096m</argLine> -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+
+----
+
+github
+circleci
+keycloak
+Angular CLI 6.0.7
+
+subdir /ui under springboot project
+
+ng generate component component-name to generate a new component. 
+
+ng generate directive|pipe|service|class|guard|interface|enum|module.
+
+ng build to build the project. The build artifacts will be stored in the ../target/classes/static/ui directory. Use the --prod flag for a production build.
+
+ng test to execute unit test via karma
+(https://karma-runner.github.io/2.0/index.html)
+
+ng ete to execute end-to-end test via protractor
+(http://www.protractortest.org/#/)
+
+Angular DevKit Readme
+(https://github.com/angular/angular-cli/blob/master/README.md)
+
+
+----
+
+docker-build-images repo
+
+used with circleci to perform build and deploy. 
+published to dockerhub as public images.
+
+1) docker-build-jdk8-aws-cli
+  Dockerfile
+    FROM circleci/openjdk:8-jdk
+        RUN cd /tmp; curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" ; unzip awscli-bundle.zip ; sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+        USER root
+        RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+        RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        RUN apt-get update && apt-get install -y google-chrome-stable
+  README.md
+   (readme describes how to build docker file)
+   docker build -t username/docker-build-jdk8-aws-cli . docker tag username/docker-build-jdk8-aws-cli:latest byarger/docker-build-jdk8-aws-cli:1 docker push username/docker-build-jdk8-aws-cli:1 docker push byarger/docker-build-jdk8-aws-cli:latest
+
+2) docker-build-python-aws-boto3
+   Dockerfile:
+        FROM circleci/python:3-jessie-node-browsers
+        RUN sudo pip install boto3
+
+3) docker-build-terraform-aws-cli
+   Dockerfile:
+        FROM hashicorp/terraform:0.11.7
+
+        RUN \
+              apk -Uuv add groff less python py-pip && \
+              pip install awscli && \
+              apk --purge -v del py-pip && \
+              rm /var/cache/apk/*
+
+4) docker-keycloak-ha
+   Dockerfile:
+     FROM jboss/keycloak:4.1.0.Final
+     ENV DB_VENDOR POSTGRES
+     ENV PROXY_ADDRESS_FORWARDING true
+     ADD cli /opt/jboss/keycloak/cli/
+     RUN cd /opt/jboss/keycloak && bin/jboss-cli.sh --file=cli/postgres-ha.cli
+     RUN rm -rf /opt/jboss/keycloak/standalone/configuration/standalone_xml_history
+     USER root
+     ADD docker-entrypoint-aws.sh /opt/jboss/
+     RUN chmod +x /opt/jboss/docker-entrypoint-aws.sh
+     ENTRYPOINT [ "/opt/jboss/docker-entrypoint-aws.sh" ]
+     CMD ["-b", "0.0.0.0", "--server-config", "standalone-ha.xml"]
+
+  script:
+      #!/bin/sh
+      # Debug
+      # ip -f inet -o addr show
+      # Find private ip address
+      export EXTERNAL_ADDR=`awk 'END{print $1}' /etc/hosts`
+      if [ "$EXTERNAL_ADDR" = "" ]; then
+          EXTERNAL_ADDR=127.0.0.1
+      fi
+      echo "Use $EXTERNAL_ADDR for clustering."
+      sh /opt/jboss/docker-entrypoint.sh $@ -Djboss.bind.address.private=$EXTERNAL_ADDR -Djboss.bind.address.management=$EXTERNAL_ADDR -Djgroups.bind.address=$EXTERNAL_ADDR -Djava.net.preferIPv4Stack=true -Dignore.bind.address=true
+ 
+  example (replace bla):
+    docker build -t keycloak . docker tag keycloak:latest bla.dkr.ecr.us-east-1.amazonaws.com/keycloak:latest docker tag keycloak:latest bla.dkr.ecr.us-east-1.amazonaws.com/keycloak:1 docker push bla.dkr.ecr.us-east-1.amazonaws.com/keycloak:latest docker push bla.dkr.ecr.us-east-1.amazonaws.com/keycloak:1
+
+  example:
+    docker run -p 8080:8080 -e "DB_ADDR=IP/hostname of database" -e "DB_PASSWORD=password" -e "DB_USER=username" -e "KEYCLOAK_LOGLEVEL=DEBUG" bla.dkr.ecr.us-east-1.amazonaws.com/keycloak:5
+
+
+------
+
+expect at least $600/month.
+
+
+AWS HasshiCorp has Terraform 
+(https://www.terraform.io/)
+
+
+Brand New AWS account: (company, prodname, bla)
+  1) An s3 bucket named "company-aws-infra-backend" to hold the terraform backend
+  2) An ECR repository named "company/prodname" in the us-east-1 region.
+  3) Update the pom.xml in prodname to match the account number in prodname 
+  4) Update the account number in modules/ecs/task-definition.json
+  5) Push up an initial version of the app so that terraform can deploy it with the infrastructure a. cd /path/to/prodname/clone b. ./mvnw package -Dmaven.test.skip=true c. aws ecr get-login --region us-east-1 d. docker push bla.dkr.ecr.us-east-1.amazonaws.com/company/prodname:latest
+  6) Initialize the backend a. terraform init --reconfigure
+
+Example structure...
+
+modules
+  ec2
+    acm.tf
+    autoscaling-group.tf
+    elastic-load-balancer.tf
+    iam.tf
+    launch-configuration.tf
+    outputs.tf
+    user-data.tpl
+    variables.tf
+  ecs
+    cluster.tf
+    keycloak-service.tf
+    keycloak-task-definition.json
+    keycloak-task-definition.tf
+    root-redirect-service.tf
+    root-redirect-task-definitions.json
+    root-redirect-task-definition.tf
+    service.tf
+    task-definition.json
+    task-definition.tf
+    variables.tf
+  rds
+    aurora.tf
+    outputs.tf
+    variables.tf
+  vpc
+    bastion.tf
+    iam.tf
+    main.tf
+    nat.tf
+    outputs.tf
+    variables.tf
+packer (AMI is built with packer: 'packer build bastion.json')
+  bastion
+    backup.sh
+    bastion.json
+    restore.sh
+  ecs
+    ecs.json
+main.tf
+variables.tf

@@ -1,0 +1,20 @@
+
+AutoReloads:
+
+intellij with spring-boot-devtools
+
+run as jar and it assumes production; run from ide assumes dev
+
+intellij
+  1) compiler, build project automatically
+
+  2) shift-comand-a, enter registry and enter
+     find compiler.automati.allow.when.applrunning check it
+
+chrome has a plugin livereload 
+
+
+then you spit screen with intellij and chrom on same montior and see the
+change immediately take affect when you save.
+
+

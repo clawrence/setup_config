@@ -1,0 +1,121 @@
+
+
+update databook set filename = replace(filename,'"','');
+
+psql --version
+
+psql -d dbname
+
+
+create temp table foo(data jsonb);
+
+copy foo(data) from 'fullpath/test.json' csv quote e'\x01' delimiter e'\x02';
+
+
+\dt
+
+DROP TABLE IF EXISTS goos;
+
+CREATE TABLE goos(id serial PRIMARY KEY, elaformat VARCHAR(30),
+                   filename VARCHAR(100), version VARCHAR(20), checksum VARCHAR(50), data jsonb);
+
+\d goos
+
+DELETE from goos WHERE goos.id = 1;
+
+INSERT INTO goos (filename, version, checksum, data)
+(SELECT data->'fileName', data->'version', data->'checkSum', data from foo);
+
+select id, filename, version, checksum, data->'fileName' from goos;
+
+UPDATE goos SET elaformat = 'AIRBUS';
+
+\q
+
+--
+
+# create a temp table for export
+psql -a -d ${DB} -c "DROP TABLE IF EXISTS ${EXPORT_TABLE}"
+psql -a -d ${DB} -c "create table ${EXPORT_TABLE} as select * from ${TABLE} where id = ${ID}"
+pg_dump -a -t ${EXPORT_TABLE} --column-inserts -d ${DB} > $OUTPUT_FILE
+sed -i.bak -e "s/${EXPORT_TABLE}/${TABLE}/g" -e "s/^SET/--SET/" -e "s/^SELECT/--SELECT/" $OUTPUT_FILE
+psql -a -d ${DB} -c "DROP TABLE ${EXPORT_TABLE}"
+rm -f ${OUTPUT_FILE}.bak
+
+
+---
+
+export temp table for test..
+
+EXPORT_TABLE="${TABLE}_export"
+
+# create a temp table for export
+psql -a -d ${DB} -c "DROP TABLE IF EXISTS ${EXPORT_TABLE}"
+psql -a -d ${DB} -c "create table ${EXPORT_TABLE} as select * from ${TABLE} where id = ${ID}"
+pg_dump -a -t ${EXPORT_TABLE} --column-inserts -d ${DB} > $OUTPUT_FILE
+sed -i.bak -e "s/${EXPORT_TABLE}/${TABLE}/g" -e "s/^SET/--SET/" -e "s/^SELECT/--SELECT/" $OUTPUT_FILE
+psql -a -d ${DB} -c "DROP TABLE ${EXPORT_TABLE}"
+rm -f ${OUTPUT_FILE}.bak
+
+
+
+----
+
+
+restore.sh
+
+#!/bin/bash
+
+SCHEMA=`ls -tr ~/path/db_backup/rds-dump-schema-*gz | tail -1`
+DATA=`ls -tr ~/path/db_backup/rds-dump-data-*gz | tail -1`
+DB="db"
+
+if [ $# -lt 3 ] ; then
+  USER="default"
+else
+  USER=$3
+fi
+
+if [ ! -f "${SCHEMA}" ] ; then
+  echo "No schema backup found at ${SCHEMA}"
+  exit 1
+fi
+
+if [ ! -f "${DATA}" ] ; then
+  echo "No data backup found at ${DATA}"
+  exit 1
+fi
+
+#set -x
+
+cp "${SCHEMA}" .
+SCHEMA_FILENAME=$(basename "${SCHEMA}")
+SCHEMA_FILENAME_NOGZ=`echo "${SCHEMA_FILENAME}" | sed 's/\.gz//'`
+rm -f ${SCHEMA_FILENAME_NOGZ}
+gunzip ${SCHEMA_FILENAME}
+
+
+# remove any revokes to rdsadmin
+sed -i.bak 's/^.*rdsadmin.*//' ${SCHEMA_FILENAME_NOGZ}
+# replace elamaster user with specified local user
+sed -i.bak "s/elamaster/${USER}/g" ${SCHEMA_FILENAME_NOGZ}
+
+cp "${DATA}" .
+DATA_FILENAME=$(basename "${DATA}")
+DATA_FILENAME_NOGZ=`echo "${DATA_FILENAME}" | sed 's/\.gz//'`
+rm -f ${DATA_FILENAME_NOGZ}
+gunzip ${DATA_FILENAME}
+
+psql -a -d ${DB} < ${SCHEMA_FILENAME_NOGZ}
+
+psql -a -d ${DB} < ${DATA_FILENAME_NOGZ}
+
+rm ${SCHEMA_FILENAME_NOGZ}
+rm ${SCHEMA_FILENAME_NOGZ}.bak
+rm ${DATA_FILENAME_NOGZ}
+
+
+-----
+
+
+

@@ -1,0 +1,36 @@
+
+
+http request to Controller (@RestController)
+
+Controller to TopicService (@Service)
+
+
+Service to TopicRepository
+  //getall, getTopic(String id), updateTopic(Topic t), deleteTopic(String id)
+  extends CrudRepository and only have to add special methods
+
+
+Repository to Topic (@Entity)
+
+
+
+Entity is Topic
+
+
+
+
+
+get /topics
+
+post /topics
+
+get /topics/id
+
+put /topics/id
+
+delete /topics/id
+
+
+--> more complex with multiple levels:
+
+

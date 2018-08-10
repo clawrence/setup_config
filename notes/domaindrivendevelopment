@@ -1,0 +1,105 @@
+
+Domain Driven Design (DDD)
+
+'domain-driven design tackling complexity in the heart of software'
+by Eric Evans (2004)
+
+The center is Ubiquitous Language and Model-Driven Design.
+  1) marriage of technical terms and business terms
+     mix of diagram with naturla language explaination
+  2) the model supports effective implementation and
+     abstracts key domain knowledge.  The modeling and the coding
+     must be combines so that the code and model are of value.
+
+The ubiquitous language guides the model-driven design.  The
+services, value objects, entities, and modules reflect the
+ubiquitous language.
+
+Model-Driven Design expresses model as value objects, entities,
+modules, and services.  It isolates the domain with a layered
+architecture.  It simplifies interpretation with standalone classes.
+It reduces the cost of change with conceptual contours.  It
+expresses the model through intention revealing interfaces that
+reflect the ubiquitous language.
+
+The interface are safe and simple with side-effect-free functions.
+
+The Model-Driven Design is valid within a bounded context which
+relates to the core domain by a context map.
+
+-----
+
+'implementing domain-driven design'
+by Vaughn Vernon (2013)
+
+alternate DDD explaination with new examples to help explain
+Aggregates and Bounded Contexts and new insights from papers
+and presentations for the last 9 years.
+
+Building Blocks of a Model:
+  Domain Events
+  Entities
+  Value Objects
+
+Discusses Big Ball of Mud in terms of Context Map.
+
+Trivial solutions with 30 total user stories or use cases with minimal buisness logic
+just use Rails or Grails forget about DDD.
+
+30-40 user stories creaping to complexity.  Tendency not to recognize the complexity
+early enough.  It might be good to ignore rails and start DDD.
+
+If it will change often over a number of years and you can't anticipate the changes
+will be simple then use DDD to hep manage teh complexity of refactoring you model
+over time.
+
+If new and very complex and working with domain experts and experiment with models
+to get it right.  Use DDD.
+
+DDD is most appropriate for complex designs
+
+Rails active record is not a domain model.  It is a data model projected from a
+relational model into objects.  i.e., public setters/getters and no buisiness logic.
+Objects that are mostly attribute holders.
+
+Anemic Domain Models may result from example code snippets copied or from lack
+of design.  It is just set/get stuff. Problems:
+  1) little inteention revealed by interface
+  2) interfaces add hidden complexity
+  3) domain object isn't really an object; it's just a data holder
+
+Todo DDD:
+
+1) draw pictures
+2) create simple terms and definitions (reusable phrases for languge of the domain)
+3) review picture and terminology with the team
+4) Ubiquitous (pervasive (found everywhere) within the domain, one ubiquitous 
+language per Bounded Context, the entire enterprise will likely NOT have the
+same ubiquitous language (although some terms may overlap))
+
+
+Biz Value of DDD:
+1) invest effort and model only what matters to the business
+2) Refine, Precisely define and understand the business
+3) domain experts contribute to the software
+4) user experience is gaines
+5) clear boundaries are placed around models
+6) enterprise architecture is better organized
+7) Agile iterate and incrementally improve
+8) different methods are applied to the problem
+(modelling tools: aggregates, entitites, value obbjects, services, domain events, etc.)
+
+
+DDD should be light weight:
+1) write a test demonstrating how the new domain object should be used by the client
+2) create new domain object with enough code to make the test complie
+3) refactor both until the test reflects what the client would use with proper behavior.
+4) implement each domain object behavior until the test passes, refactoring until no
+innappropriate code duplication exists
+5) demo code to team members, domain experts to confirm use matches ubiquitous meaning.
+
+
+
+
+
+
