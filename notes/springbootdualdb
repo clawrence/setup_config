@@ -1,0 +1,520 @@
+
+In the end game, you can swap database  with env variables such as:
+
+export APP_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5432/goatdb
+export APP_DATASOURCE_JDBC_URL=jdbc:postgresql://127.0.0.1:5432/goatdb
+export APP_DATASOURCE_USERNAME=user
+export APP_DATASOURCE_PASSWORD=pwd
+
+
+export RAWMODEL_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5432/cowdb
+export RAWMODEL_DATASOURCE_JDBC_URL=jdbc:postgresql://127.0.0.1:5432/cowdb
+export RAWMODEL_DATASOURCE_USERNAME=user
+export RAWMODEL_DATASOURCE_PASSWORD=pwd
+
+mvn spring-boot:run
+
+---- example pom ----
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.company.bla</groupId>
+  <artifactId>app</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>bla</name>
+  <description>Demo project for Spring Boot</description>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.1.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <spring.profiles.active>local</spring.profiles.active>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.keycloak.bom</groupId>
+        <artifactId>keycloak-adapter-bom</artifactId>
+        <version>4.1.0.Final</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-cache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>3.17</version>
+    </dependency>
+    <!-- had to add this to get tests to run from command line with mvn -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>0.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>3.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test-autoconfigure</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.properties</exclude>
+        </excludes>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <configuration>
+          <dateFormat>yyyyMMdd-HHmmss</dateFormat>
+          <injectAllReactorProjects>true</injectAllReactorProjects>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>PACKAGE</element>
+                  <limits>
+                    <limit>
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+          <argLine>-Xms512m -Xmx1024m</argLine>
+          <!-- <argLine>-Xms2048m -Xmx4096m</argLine> -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
+
+---
+
+SpringBoot custom
+
+
+package com.company.bla;
+
+import com.zaxxer.hikari.HikariDataSource;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "entityManagerFactory",
+    transactionManagerRef = "modelTransactionManager",
+    basePackages = {"com.company.bla.model.repository" }
+)
+public class BLAModelConfig {
+  @Bean
+  @Primary
+  @ConfigurationProperties("app.datasource")
+  public DataSourceProperties modelDataSourceProperties() {
+    return new DataSourceProperties();
+  }
+
+  @Bean(name="modelDataSource")
+  @Primary
+  @ConfigurationProperties("app.datasource.configuration")
+  public DataSource modelDataSource() {
+    return modelDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
+  }
+
+  @Bean(name = "entityManagerFactory")
+  @Primary
+  public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+      EntityManagerFactoryBuilder builder,
+      @Qualifier("modelDataSource") DataSource dataSource
+  ){
+    return builder
+        .dataSource(dataSource)
+        .packages("com.company.bla.model")
+        .persistenceUnit("goatdb")
+        .build();
+  }
+
+
+
+  @Bean(name = "modelTransactionManager")
+  @Primary
+  public PlatformTransactionManager modelTransactionManager(
+    @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory
+  ){
+    return new JpaTransactionManager(entityManagerFactory);
+  }
+
+  @Bean(name="testEntityManager")
+  public TestEntityManager testEntityManager(
+      @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
+    return new TestEntityManager(entityManagerFactory);
+  }
+
+  @Configuration
+  public class JpaWebConfig implements WebMvcConfigurer {
+    @Autowired
+    @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory;
+
+    @Bean
+    public OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor() {
+      OpenEntityManagerInViewInterceptor intercept = new OpenEntityManagerInViewInterceptor();
+      intercept.setEntityManagerFactory(entityManagerFactory);
+      return intercept;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+      registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor());
+    }
+
+  }
+}
+
+
+package com.company.bla;
+
+import com.zaxxer.hikari.HikariDataSource;
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "rawEntityManagerFactory",
+    transactionManagerRef = "rawTransactionManager",
+    basePackages = {"com.company.bla.rawmodel.repository" }
+)
+public class RawModelConfig {
+
+
+  @PostConstruct
+  protected void initialize() {
+    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+    //populator.addScript(resourceLoader.getResource(environment.getProperty("batch.schema.script")));
+    //populator.addScript(resourceLoader.getResource(environment.getProperty("batch.schema.script")));
+    addScript(populator, new ClassPathResource("schema-postgres2.sql"));
+    addScript(populator, new ClassPathResource("data-postgres2.sql"));
+    //  populator.setContinueOnError(true);
+    DatabasePopulatorUtils.execute(populator ,  rawDataSource());
+  }
+
+  private void addScript(ResourceDatabasePopulator populator, ClassPathResource resource) {
+    if(resource != null && resource.exists()) {
+      populator.addScript( resource);
+    }
+  }
+
+  @Bean
+  @ConfigurationProperties("rawmodel.datasource")
+  public DataSourceProperties rawDataSourceProperties() {
+    return new DataSourceProperties();
+  }
+
+  @Bean(name="rawDataSource")
+  @ConfigurationProperties("rawmodel.datasource.configuration")
+  public DataSource rawDataSource() {
+    return rawDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
+  }
+
+  @Bean(name = "rawEntityManagerFactory")
+  public LocalContainerEntityManagerFactoryBean rawEntityManagerFactory(
+      EntityManagerFactoryBuilder builder,
+      @Qualifier("rawDataSource") DataSource dataSource
+  ){
+    return builder
+        .dataSource(dataSource)
+        .packages("com.company.bla.rawmodel")
+        .persistenceUnit("cowdb")
+        .build();
+  }
+
+
+  @Bean(name = "rawTransactionManager")
+  public PlatformTransactionManager rawTransactionManager(
+    @Qualifier("rawEntityManagerFactory") EntityManagerFactory entityManagerFactory
+  ){
+    return new JpaTransactionManager(entityManagerFactory);
+  }
+
+
+  @Bean(name="rawTestEntityManager")
+  public TestEntityManager rawTestEntityManager(
+    @Qualifier("rawEntityManagerFactory") EntityManagerFactory rawEntityManagerFactory) {
+    return new TestEntityManager(rawEntityManagerFactory);
+  }
+
+  @Configuration
+  public class JpaWebConfig implements WebMvcConfigurer {
+    @Autowired
+    @Qualifier("rawEntityManagerFactory") EntityManagerFactory rawEntityManagerFactory;
+
+    @Bean(name="rawView")
+    public OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor() {
+      OpenEntityManagerInViewInterceptor intercept = new OpenEntityManagerInViewInterceptor();
+      intercept.setEntityManagerFactory(rawEntityManagerFactory);
+      return intercept;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+      registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor());
+    }
+
+  }
+}
+
+
+----
+
+server.port=8086
+server.servlet.context-path=/blaurl
+spring.main.banner-mode=off
+logging.level.org.springframework=DEBUG
+spring.jpa.hibernate.ddl-auto=none
+#handle embedded Repeated columns
+
+spring.jpa.properties.hibernate.hbm2ddl.auto=none
+spring.jpa.properties.hibernate.implicit_naming_strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+spring.jpa.properties.hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+app.datasource.platform=postgres
+app.datasource.initialization-mode=always
+app.datasource.url=jdbc:postgresql://127.0.0.1:5432/goatdb
+app.datasource.jdbc-url=jdbc:postgresql://127.0.0.1:5432/goatdb
+app.datasource.username=user
+app.datasource.password=
+app.datasource.maximum-pool-size=9
+app.datasource.connection.maximum-pool-size=9
+
+#log4j.category.org.springframework=ALL
+rawmodel.datasource.platform=postgres2
+rawmodel.datasource.initialization-mode=always
+rawmodel.datasource.url=jdbc:postgresql://127.0.0.1:5432/cowdb
+rawmodel.datasource.jdbc-url=jdbc:postgresql://127.0.0.1:5432/cowdb
+rawmodel.datasource.username=user
+rawmodel.datasource.password=
+rawmodel.datasource.maximum-pool-size=9
+rawmodel.datasource.configuration.maximum-pool-size=9
+
+
+#spring.jpa.hibernate.dialect=org.hibernate.dialect.PostgreSQL95Dialect
+spring.jpa.hibernate.dialect=com.company.bla.postgres.PostgreSQL95Dialect
+spring.jpa.show-sql=true
+#for development mode turn of thymeleaf cache
+spring.thymeleaf.cache=false
+spring.datasource.initialization-mode=always
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+logging.level.org.hibernate.SQL=INFO
+
+management.security.enabled=true
+security.basic.enabled=true
+security.user.name=secureuser
+security.user.password=securepwd
+
+# keycloak
+#keycloak.enabled = false
+keycloak.realm = appstore
+keycloak.auth-server-url = https://location.company.com/authurl
+keycloak.ssl-required = external
+keycloak.resource = bla
+keycloak.public-client = false
+keycloak.token-store = cookie
+keycloak.credentials.secret = secretcreds... 
+keycloak.use-resource-role-mappings = true
+keycloak.cors = true
+
+# enable tomcat to read X-Forwarded headers so the keycloak redirect URI is https
+server.use-forward-headers=true
+
+keycloak.security-constraints[0].securityCollections[0].name = health check
+keycloak.security-constraints[0].securityCollections[0].patterns[0] = /actuator/health
+
+keycloak.security-constraints[1].authRoles[0]=user
+keycloak.security-constraints[1].securityCollections[0].patterns[0]=/*
+
+# index.html is cached by default which keeps logout from working (since browser caches page)
+spring.resources.cache.cachecontrol.no-store=true
+spring.resources.cache.cachecontrol.must-revalidate=true
+spring.resources.cache.period=PT0S
+
+#we manually configure open-in-view for dual db
+spring.jpa.open-in-view=false
+
+
+

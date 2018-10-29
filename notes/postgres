@@ -28,7 +28,7 @@ INSERT INTO goos (filename, version, checksum, data)
 
 select id, filename, version, checksum, data->'fileName' from goos;
 
-UPDATE goos SET elaformat = 'AIRBUS';
+UPDATE goos SET elaformat = 'ARBUSSLING';
 
 \q
 
@@ -116,6 +116,57 @@ rm ${DATA_FILENAME_NOGZ}
 
 
 -----
+
+example query jsonb data field:
+
+select id, data->'sheetDataMap'->'A108', checksum from rawworkbook where checksum = '2163a4ed6fe7ec3bad2ffa4f3e2da51a';
+
+
+---
+
+update templates set sourcewbname = replace(sourcewbname, '"', '') ;
+
+
+alter table rawworkbook drop constraint "hoos_checksum_key";
+
+
+alter table rawworkbook add constraint "hoos_checksum_key" unique (checksum);
+
+
+-----
+To dump test schema after it is generated
+pg_dump -s testdb >bla.sql
+
+For production may have to put CONSTRAINTS in the table create rather than as
+separate statements.
+
+
+---
+
+
+There is not cascasde option for @ElementCollection so have to manually fix the schea.
+ https://stackoverflow.com/questions/14005442/on-delete-cascade-option-not-in-generated-when-using-ddl-schema-generation-on-my
+
+ import.sql in test can add it after the generated schema runs for test.
+
+example,
+  begin;
+
+  alter table sourcenotes drop constraint "fknes9clkr6bwg2e7jfhsjas7pk";
+  alter table sourcenotes add constraint "fknes9clkr6bwg2e7jfhsjas7pk" foreign key (source_id) references sources(id) on update cascase on delete cascade;
+
+  commit;
+
+
+have to manually add it to schema.sql for prod.
+
+
+----
+
+
+ALTER TABLE public.sourcecumulativeresults ADD COLUMN IF NOT EXISTS totalbatterylife_maxi_climb double precision NOT NULL default 0.0;
+ALTER TABLE public.sourcecumulativeresults ALTER COLUMN totalbatterylife_maxi_climb DROP DEFAULT;
+
 
 
 

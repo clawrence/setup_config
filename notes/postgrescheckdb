@@ -1,0 +1,36 @@
+
+
+Investigated how to check if sql is running with a certain db:
+
+Found a function that would do it commented below.
+
+Yet, in spring boot the $$ parsing does not work so you have
+to use ' and then '' inside the quotes rather than $$ parsing
+or it messes up the parsing.
+
+/*
+CREATE TABLE IF NOT EXISTS public.junk (
+  id bigint,
+  nums int,
+  strs varchar
+);
+ */
+
+/*
+DO
+$do$
+BEGIN
+IF (select current_database() = 'cowdb') THEN
+  INSERT INTO public.junk VALUES (1,99,'jj'); \
+END IF; \
+END
+$do$;
+  */
+/*
+*/
+
+/* below I think worked.... to do insert only when matches db 
+   in data.sql */
+
+DO ' BEGIN IF (select current_database() = ''goatdb'') THEN INSERT INTO public.junk VALUES (1,77, ''now from if statement''); END IF; END';
+
