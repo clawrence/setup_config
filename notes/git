@@ -1,4 +1,16 @@
 
+add an alias?
+ git commit --amend --date=now
+
+--
+
+
+ git log --author="Craig Lawrence" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }'
+
+added lines: 32791, removed lines: 19369, total lines: 13422
+
+
+---
 
 # to create new project 
 cd project-dir

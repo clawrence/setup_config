@@ -1,0 +1,27 @@
+#better than ctrl v ctrl m replacement
+
+#to remove windows junk quickly with vim
+
+vim node.csv
+:e ++ff=dos
+:set ff=unix
+:wq
+
+----
+
+# get your public ip
+http://myip.expert
+http://myip.ms
+
+
+https://www.labnol.org/internet/tools/best-online-tools-for-webmasters-know-everything-about-websites/2744/
+
+
+# tools used by site
+https://builtwith.com/
+
+https://www.whatsmydns.net
+
+just-ping.com
+
+
