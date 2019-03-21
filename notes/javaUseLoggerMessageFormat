@@ -1,0 +1,12 @@
+
+ sl4j message formater, didn't use but might find useful one day.
+
+ private void checkBadRequest(boolean throwException, String format, Object... arguments) {
+    if(throwException) {
+      FormattingTuple tp = MessageFormatter.arrayFormat(format, arguments);
+      throw new BadRequestException(tp.getMessage());
+    }
+  }
+
+
+

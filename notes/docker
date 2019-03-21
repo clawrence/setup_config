@@ -143,7 +143,33 @@ Types
   #embedded dns then if it cannot resolve it goes to external dns configured
   #for the container.i 127.0.0.11 in resolve.conf
 
+-----
 
 
 
+2019 info (replace bla with image name) example of typical flow
 
+if image needs theme script run build-theme.sh (which unzips them files to use)
+
+#build image
+ docker build -t bla .
+
+#tag to run local
+docker tag bla:latest XXX..dkr.ecr.us-east-1.amazonaws.com/bla:latest
+
+docker tag bla:latest XXX.dkr.ecr.us-east-1.amazonaws.com/bla:1
+
+# skip this step of pushing it until you want it published 
+#docker push XXX.dkr.ecr.us-east-1.amazonaws.com/bla:latest 
+#docker push XXX.dkr.ecr.us-east-1.amazonaws.com/bla:1
+#the above exmaples depend upon what deploy uses...
+
+# example run with port 8080 available and params for this particluar
+# application are passed in.  Then hit browser local localhost that port.
+ docker run -it -p 8080:8080 -e "DB_ADDR=1.2.3.4" -e "DB_PASSWORD=password" -e "DB_USER=bla2dbuser" -e "BLA_LOGLEVEL=DEBUG" -e "DB_PORT=5432" -e "ROOT_LOGLEVEL=DEBUG" -e "BLA_USER=bla3admin" -e "BLA_PASSWORD=bla3password" bla:latest
+
+# make sure no space or control chars after = in 'DB_ADDR=' 
+# put correct db password
+# put correct db user
+# put correct user, passwrod
+# make sure local db  is say 1.2.3.4 and db will accept connection from it.

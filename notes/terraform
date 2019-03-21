@@ -1,0 +1,17 @@
+#already have aws cli working
+checkout git
+terraform init
+terraform show
+
+#script below example scrip  example-apply.sh like:
+
+export AWS_PROFILE=default
+terraform workspace select default
+terraform apply -var-file=nonprod.tfvars
+
+echo "waiting on it to stabilize"
+aws ecs wait services-stable --service blaservicename --cluster blaclustername --region us-east-1
+echo "waiting on other one to stabilize"
+aws ecs wait services-stable --service bla2servicename --cluster blaclustername --region us-east-1
+
+#end script

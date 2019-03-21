@@ -64,4 +64,17 @@ navicat
 # rails example
 https://www.digitalocean.com/community/tutorials/how-to-setup-ruby-on-rails-with-postgres
 
+----
+
+For homebrew postgrep install to opening local postgres for specific ip (not just localhost)
+
+for example if app in docker image running local needs your ip
+
+cd /usr/local/var/postgres
+add ips to 2 conf files
+pg_hba.conf
+postgresql.conf
+brew services restart postgresql
+
+
 

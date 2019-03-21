@@ -489,7 +489,7 @@ security.user.password=securepwd
 
 # keycloak
 #keycloak.enabled = false
-keycloak.realm = appstore
+keycloak.realm = definedrealm 
 keycloak.auth-server-url = https://location.company.com/authurl
 keycloak.ssl-required = external
 keycloak.resource = bla
