@@ -25,3 +25,43 @@ https://www.whatsmydns.net
 just-ping.com
 
 
+-----------
+
+
+# git checkout ui
+
+# use brew to install correct versio of node
+#  i.e. node@8
+#  update, search, info, uninstal, etc
+#  May have to setup bashrc.local !!!
+
+node --version
+v8.16.0
+
+#if need to uninstall latest angular
+npm unistall @angular/cli
+npm cache verify
+#install 6.0.7
+npm install -g @angular/ccli@6.0.7
+
+#chck version 
+ng -v
+
+#get rid of anything already instaled
+rm -rf node_modules
+git checkout package-lock.json
+# perhaps modify src/assets/config.json
+
+ng build
+ng serve
+
+----
+
+cd directory
+node -v   (need 8.x  has v8.16.0;  angular 6.2.9 I think
+  npm install -g @angular/cli@6.0.7 ; might have to 
+  npm uninstall @angular/cli first;   there is npm cache verify;
+  npm install maybe after removing lock file?)
+npm install
+ng build
+

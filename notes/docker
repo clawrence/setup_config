@@ -173,3 +173,38 @@ docker tag bla:latest XXX.dkr.ecr.us-east-1.amazonaws.com/bla:1
 # put correct db user
 # put correct user, passwrod
 # make sure local db  is say 1.2.3.4 and db will accept connection from it.
+#
+
+
+---
+
+great example
+http://www.janua.fr/howto-docker-with-keycloak/
+
+
+docker run -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -e DB_VENDOR=H2 -p 8080:8080 --name sso jboss/keycloak-examples
+
+
+docker ps
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+a41643307565 jboss/keycloak-examples "/opt/jboss/docker-e…" 20 hours ago Up 6 minutes 0.0.0.0:8080->8080/tcp sso
+
+
+docker stop sso
+
+docker start sso
+
+docker logs sso
+
+docker exec -it sso bash
+[jboss@a41643307565 ~]$
+
+
+docker inspect sso
+
+docker port sso
+8080/tcp -> 0.0.0.0:8080
+
+https://github.com/keycloak/keycloak-quickstarts
+
+
