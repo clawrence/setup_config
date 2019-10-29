@@ -14,4 +14,14 @@ aws ecs wait services-stable --service blaservicename --cluster blaclustername -
 echo "waiting on other one to stabilize"
 aws ecs wait services-stable --service bla2servicename --cluster blaclustername --region us-east-1
 
+
 #end script
+#like rbenv except for terraform:
+# check DockerFile that runs circleci to see terraform version being used
+
+brew install tfenv
+tfenv install 0.11.14
+tfenv list
+tfenv use 0.11.14
+
+

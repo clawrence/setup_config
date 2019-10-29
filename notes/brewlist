@@ -1,0 +1,16 @@
+brew list
+ack		git		libev		libunistring	postgresql
+apgdiff		glib		libevent	lua@5.1		postgresql@10
+autoconf	gmp		libffi		macvim		python
+awscli		gnutls		libgcrypt	maven		python@2
+awslogs		go		libgpg-error	mongodb		rbenv
+c-ares		icu4c		libidn2		mpfr		readline
+cscope		imagemagick	libmaxminddb	nettle		ruby-build
+dos2unix	isl		libmpc		nghttp2		sqlite
+excel-compare	jansson		libpng		node@8		tfenv
+flyway		jemalloc	libsmi		oniguruma	tika
+freetype	jenv		libssh		openssl		vnu
+gcc		jpeg		libtasn1	p11-kit		wget
+gdbm		jq		libtiff		pcre		wireshark
+gettext		jsonpp		libtool		pkg-config	xz
+

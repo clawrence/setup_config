@@ -1,0 +1,7 @@
+
+update project
+set analysis = replace(analysis::text, '"SIE_AH_AH"', '"SE_8H"')::jsonb
+where analysis::text like '%"SINGLH"%'
+and analysis::text not like '%"SINH"%';
+
+
