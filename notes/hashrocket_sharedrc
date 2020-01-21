@@ -1,0 +1,15 @@
+
+
++alias pgpass='echo "aws secretsmanager get-secret-value --secret-id "'
++alias pgpwd='"aws secretsmanager get-secret-value --secret-id'
++alias pgpost='echo "export PGPASSWORD="'
++alias pgdb='echo "psql -h localhost -p 5433 -U elamaster"'
++
++alias ecrlist='aws ecr describe-repositories | grep repositoryName'
++alias ecrelatags='aws ecr list-images --repository-name seatec/ela'
++
++#aws ec2 describe-instances --query  'Reservations[].Instances[].[InstanceId,State.Name,Tags[?Key==`Name`] | [0].Value]'
++alias fndbastion='aws ec2 describe-instances --query  '"'"'Reservations[].Instances[].[InstanceId,State.Name,Tags[?Key==`Name`] | [0].Value]'"'"''
++
+
+

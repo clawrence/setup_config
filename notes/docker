@@ -207,4 +207,9 @@ docker port sso
 
 https://github.com/keycloak/keycloak-quickstarts
 
+----
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+
 

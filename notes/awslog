@@ -1,0 +1,23 @@
+
+#!/bin/sh
+
+if [ $# -eq 3 ] ; then
+  APP=$1
+  ENV=$2
+  STREAM_NAME=$3
+elif [ $# -eq 2 ] ; then
+  APP=$1
+  ENV=$2
+elif [ $# -eq 1 ] ; then
+  APP=$1
+  ENV=nonprod
+else
+  echo "usage: last-logs.sh app-name [prod]"
+  exit 1
+fi
+
+if [ -z "$STREAM_NAME" ] ; then
+  STREAM_NAME=`aws logs describe-log-streams --log-group-name awslogs-$ENV-$APP --max-items 1 --order-by LastEventTime --descending | jq -r .logStreams[].logStreamName`
+fi
+
+aws logs get-log-events --log-group-name awslogs-$ENV-$APP --log-stream-name $STREAM_NAME --no-start-from-head| jq .events[].message -r

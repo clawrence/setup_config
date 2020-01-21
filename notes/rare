@@ -1,0 +1,16 @@
+
+#replace bla-pwd-key with real-deal.
+bla-pwd-key
+example backup
+
+export PGPASSWORD=`AWS_DEFAULT_REGION="us-east-1" aws secretsmanager get-secret-value  --secret-id bla-pwd-key | grep SecretString | sed -e "s/.*://" -e "s/\"//g" -e "s/,//g" -e "s/ //g"`
+FILENAME="rds-dump-dbname-`date +'%Y%m%d-%H%M%S'`"
+pg_dump -Fc -x -p 5432 -h nameinstancestuff.rds.amazonaws.com  -U dbmaster dbname > ${FILENAME}
+
+gzip ${FILENAME}
+echo "${FILENAME}.gz"
+
+#example restore
+
+pg_restore -p 5432 -h localhost -x -c -O -U clawrence -d dbname rds-dump-dbname-20190612-130015
+

@@ -68,3 +68,18 @@ Source Code Analysis Tools:
   phpcs-security-audit for php
 
 
+-----
+
+on aws:
+seems like aws has route to pull info that is sort of
+like ip not used.. similar to rfc-1918 addresses stuff.
+169.254.169.254 url can get local ipv4 address
+maybe 253 is dns
+maybe 123 is ntp?
+
+start up scripts may need to bind?
+
+------
+
+
+
