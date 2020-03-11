@@ -38,6 +38,11 @@ just-ping.com
 node --version
 v8.16.0
 
+
+#easy way to get angular is cd to dir with ui
+npm i
+
+
 #if need to uninstall latest angular
 npm unistall @angular/cli
 npm cache verify

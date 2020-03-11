@@ -1,0 +1,23 @@
+
+https://devnexus.com/
+
+  https://www.youtube.com/watch?v=xnIrV9kmg8g&feature=emb_rel_end
+
+https://en.wikipedia.org/wiki/Devoxx
+
+https://www.graalvm.org/docs/getting-started/
+
+https://quarkus.io/
+
+https://codete.com/blog/java-8-java-11-quick-guide/
+
+  java 9: modules, jshell, private methods in interfaces, new methods in Optional, completeOnTimeout Futures
+          @Depricated since/forRemoval
+  java 10: var keyword (type inference)
+  java 11: var in lambda expressions
+
+
+https://www.tensorflow.org/
+
+https://graphql.org/
+
